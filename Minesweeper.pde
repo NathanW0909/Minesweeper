@@ -6,9 +6,10 @@ private static final int NUM_COLS = 10;
 private static final int MINE_COUNT = (NUM_ROWS * NUM_COLS) / 5; // 20% mines
 private MSButton[][] buttons;
 private ArrayList<MSButton> mines;
+private boolean gameOver = false;
 
 void setup() {
-    size(600, 600);
+    size(600, 650); // Extra space for message
     textAlign(CENTER, CENTER);
     Interactive.make(this);
     initializeGame();
@@ -16,7 +17,8 @@ void setup() {
 
 void initializeGame() {
     buttons = new MSButton[NUM_ROWS][NUM_COLS];
-    mines = new ArrayList<MSButton>();
+    mines = new ArrayList<>();
+    gameOver = false;
 
     for (int r = 0; r < NUM_ROWS; r++) {
         for (int c = 0; c < NUM_COLS; c++) {
@@ -40,7 +42,14 @@ public void setMines() {
 
 public void draw() {
     background(0);
-    if (isWon()) displayWinningMessage();
+    
+    if (gameOver) {
+        fill(255, 0, 0);
+        textSize(40);
+        text("YOU LOSE!", width / 2, height - 25);
+    } else if (isWon()) {
+        displayWinningMessage();
+    }
 }
 
 public boolean isWon() {
@@ -56,7 +65,9 @@ public boolean isWon() {
 public void displayLosingMessage() {
     for (MSButton mine : mines) {
         mine.setLabel("X");
+        mine.clicked = true;
     }
+    gameOver = true;
 }
 
 public void displayWinningMessage() {
@@ -110,13 +121,18 @@ public class MSButton {
     }
 
     public void mousePressed() {
-        if (flagged) return;
+        if (gameOver) return;
 
-        clicked = true;
         if (mouseButton == RIGHT) {
             flagged = !flagged;
-            clicked = !flagged;
-        } else if (mines.contains(this)) {
+            return;
+        }
+
+        if (flagged || clicked) return;
+
+        clicked = true;
+
+        if (mines.contains(this)) {
             displayLosingMessage();
         } else {
             int mineCount = countMines(myRow, myCol);
@@ -137,7 +153,7 @@ public class MSButton {
     }
 
     public void draw() {
-        if (flagged) fill(0);
+        if (flagged) fill(0, 0, 255); // Blue for flags
         else if (clicked && mines.contains(this)) fill(255, 0, 0);
         else if (clicked) fill(200);
         else fill(100);
@@ -154,9 +170,4 @@ public class MSButton {
     public void setLabel(int newLabel) {
         myLabel = "" + newLabel;
     }
-
-    public boolean isFlagged() {
-        return flagged;
-    }
 }
-
