@@ -1,15 +1,18 @@
 import de.bezier.guido.*;
 import java.util.ArrayList;
 
-private static final int NUM_ROWS = 10;
-private static final int NUM_COLS = 10;
+private static final int NUM_ROWS = 15;
+private static final int NUM_COLS = 15;
 private static final int MINE_COUNT = (NUM_ROWS * NUM_COLS) / 5; // 20% mines
+private static final int CELL_SIZE = 50; // Larger cells
+private static final int SCREEN_HEIGHT = NUM_ROWS * CELL_SIZE + 50;
+private static final int SCREEN_WIDTH = NUM_COLS * CELL_SIZE;
 private MSButton[][] buttons;
 private ArrayList<MSButton> mines;
 private boolean gameOver = false;
 
 void setup() {
-    size(400, 450); // Extra space for message
+    size(SCREEN_WIDTH, SCREEN_HEIGHT);
     textAlign(CENTER, CENTER);
     Interactive.make(this);
     initializeGame();
@@ -45,7 +48,7 @@ public void draw() {
     
     if (gameOver) {
         fill(255, 0, 0);
-        textSize(30);
+        textSize(40);
         text("YOU LOSE!", width / 2, height - 25);
     } else if (isWon()) {
         displayWinningMessage();
@@ -109,8 +112,8 @@ public class MSButton {
     private String myLabel;
 
     public MSButton(int row, int col) {
-        width = 400 / NUM_COLS;
-        height = 400 / NUM_ROWS;
+        width = CELL_SIZE;
+        height = CELL_SIZE;
         myRow = row;
         myCol = col;
         x = myCol * width;
