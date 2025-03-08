@@ -9,7 +9,7 @@ private ArrayList<MSButton> mines;
 private boolean gameOver = false;
 
 void setup() {
-    size(600, 650); // Extra space for message
+    size(400, 450); // Extra space for message
     textAlign(CENTER, CENTER);
     Interactive.make(this);
     initializeGame();
@@ -45,7 +45,7 @@ public void draw() {
     
     if (gameOver) {
         fill(255, 0, 0);
-        textSize(40);
+        textSize(30);
         text("YOU LOSE!", width / 2, height - 25);
     } else if (isWon()) {
         displayWinningMessage();
@@ -109,8 +109,8 @@ public class MSButton {
     private String myLabel;
 
     public MSButton(int row, int col) {
-        width = 600 / NUM_COLS;
-        height = 600 / NUM_ROWS;
+        width = 400 / NUM_COLS;
+        height = 400 / NUM_ROWS;
         myRow = row;
         myCol = col;
         x = myCol * width;
