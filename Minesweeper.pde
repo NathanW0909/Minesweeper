@@ -1,16 +1,20 @@
 import de.bezier.guido.*;
 import java.util.ArrayList;
 
-private static final int NUM_ROWS = 5;
-private static final int NUM_COLS = 5;
+private static final int NUM_ROWS = 10;
+private static final int NUM_COLS = 10;
+private static final int MINE_COUNT = (NUM_ROWS * NUM_COLS) / 5; // 20% mines
 private MSButton[][] buttons;
 private ArrayList<MSButton> mines;
 
 void setup() {
-    size(400, 400);
+    size(600, 600);
     textAlign(CENTER, CENTER);
     Interactive.make(this);
+    initializeGame();
+}
 
+void initializeGame() {
     buttons = new MSButton[NUM_ROWS][NUM_COLS];
     mines = new ArrayList<MSButton>();
 
@@ -24,7 +28,8 @@ void setup() {
 }
 
 public void setMines() {
-    while (mines.size() < (NUM_ROWS * NUM_COLS) / 5) { // Adjust mine count as needed
+    mines.clear();
+    while (mines.size() < MINE_COUNT) {
         int r = (int) (Math.random() * NUM_ROWS);
         int c = (int) (Math.random() * NUM_COLS);
         if (!mines.contains(buttons[r][c])) {
@@ -80,6 +85,12 @@ public int countMines(int row, int col) {
     return numMines;
 }
 
+void keyPressed() {
+    if (key == ' ') {
+        initializeGame();
+    }
+}
+
 public class MSButton {
     private int myRow, myCol;
     private float x, y, width, height;
@@ -87,8 +98,8 @@ public class MSButton {
     private String myLabel;
 
     public MSButton(int row, int col) {
-        width = 400 / NUM_COLS;
-        height = 400 / NUM_ROWS;
+        width = 600 / NUM_COLS;
+        height = 600 / NUM_ROWS;
         myRow = row;
         myCol = col;
         x = myCol * width;
@@ -148,3 +159,4 @@ public class MSButton {
         return flagged;
     }
 }
+
